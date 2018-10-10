@@ -1,6 +1,7 @@
 package com.mybatis.mapper;
 
 import com.mybatis.po.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,6 +12,10 @@ import java.util.List;
 
 public interface UserMapper {
     public User queryUserById(Integer id);
+    public List<User> queryUserByName(@Param("userName")String userName);
+    public List<User> queryUserByNation(@Param("nation")String nation);
+    public List<User> queryUserByNameAndNation(User user);
+    public List<User> queryUserByNameAndNation2(User user);
     public Integer addUser(User user);
     public Integer addUserHasKey(User user);
     public Integer addUserHasKeyGeneral(User user);

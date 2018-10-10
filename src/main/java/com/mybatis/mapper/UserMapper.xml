@@ -15,9 +15,68 @@ statement 描述即待执行的sql
 串拼接形式无法避免sql 注入
 -->
 <mapper namespace="com.mybatis.mapper.UserMapper">
+    <resultMap id="userMap" type="user">
+        <id column="id" property="id"></id>
+        <result column="user_name" property="userName"></result>
+        <result column="user_pwd" property="userPwd"></result>
+        <result column="real_name" property="realName"></result>
+        <result column="card_id" property="cardId"></result>
+        <result column="nation" property="nation"></result>
+    </resultMap>
+
     <select id="queryUserById" parameterType="int"
             resultType="user">
           select id,user_name as userName,user_pwd as userPwd from user where id=#{id}
+    </select>
+
+    <!--根据用户名查询用户信息-->
+    <select id="queryUserByName" parameterType="string" resultMap="userMap">
+        select * from user where 1=1
+        <if test="@Ognl@isNotEmpty(userName)">
+            and user_name like concat('%',#{userName},'%')
+        </if>
+    </select>
+
+    <!--根据国家检索用户信息-->
+    <select id="queryUserByNation" parameterType="string" resultMap="userMap">
+        select id,
+        <choose>
+            <when test="@Ognl@isNotEmpty(nation)">
+                user_name
+            </when>
+            <otherwise>
+                real_name
+            </otherwise>
+        </choose>
+        from user where nation like concat('%',#{nation},'%')
+    </select>
+
+    <!--通过用户名和国家查询个人信息-->
+    <!--利用 where标签自动去掉 where-->
+    <select id="queryUserByNameAndNation" parameterType="user" resultMap="userMap">
+        select * from user
+        <where>
+            <if test="@Ognl@isNotEmpty(userName)">
+                user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="@Ognl@isNotEmpty(nation)">
+                nation like concat('%',#{nation},'%')
+            </if>
+        </where>
+    </select>
+
+    <!--通过用户名和国家查询个人信息-->
+    <!--利用 trim按需要自动去掉slq中的语句-->
+    <select id="queryUserByNameAndNation2" parameterType="user" resultMap="userMap">
+        select * from user
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="@Ognl@isNotEmpty(userName)">
+                user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="@Ognl@isNotEmpty(nation)">
+                nation like concat('%',#{nation},'%')
+            </if>
+        </trim>
     </select>
 
     <!--添加不返回id-->
@@ -43,10 +102,10 @@ VALUES ( #{userName}, #{userPwd}, #{realName}, #{nation}, #{cardId});
 
     <!--批量添加用户-->
     <insert id="addUserBatch" parameterType="list">
-        INSERT INTO user (user_name, user_pwd, real_name, nation, card_id) 
+        INSERT INTO user (user_name, user_pwd, real_name, nation, card_id)
         VALUES
         <foreach collection="list" item="item" separator=",">
-             ( #{item.userName}, #{item.userPwd}, #{item.realName}, #{item.nation}, #{item.cardId})
+            ( #{item.userName}, #{item.userPwd}, #{item.realName}, #{item.nation}, #{item.cardId})
         </foreach>
     </insert>
 
@@ -58,14 +117,14 @@ VALUES ( #{userName}, #{userPwd}, #{realName}, #{nation}, #{cardId});
     </update>
 
     <!--批量更新用户数据-->
-    <update id="updateUserBatch" >
-      UPDATE user SET user_pwd = '123456'
-       WHERE
-        id  in (
-         <foreach collection="array" item="item" separator=",">
-           #{item}
-       </foreach>
-       )
+    <update id="updateUserBatch">
+        UPDATE user SET user_pwd = '123456'
+        WHERE
+        id in (
+        <foreach collection="array" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
     </update>
 
     <!--删除-->
