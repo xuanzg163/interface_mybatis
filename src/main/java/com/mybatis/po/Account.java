@@ -1,17 +1,18 @@
 package com.mybatis.po;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by xlf on 2018/10/10.
  */
-public class Account {
+public class Account  implements Serializable {
 
     private Integer id;
     private String aname;
     private String type;
     private Double money;
-    private Integer user_id;
+    private Integer userId;
     private Date createTime;
     private Date updateTime;
     private String remark;
@@ -48,12 +49,12 @@ public class Account {
         this.money = money;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Date getCreateTime() {
@@ -87,7 +88,7 @@ public class Account {
                 ", aname='" + aname + '\'' +
                 ", type='" + type + '\'' +
                 ", money=" + money +
-                ", user_id=" + user_id +
+                ", userId=" + userId +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", remark='" + remark + '\'' +

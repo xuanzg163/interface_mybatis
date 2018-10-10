@@ -142,4 +142,79 @@ VALUES ( #{userName}, #{userPwd}, #{realName}, #{nation}, #{cardId});
         )
     </delete>
 
+
+    <!--映射关系问题-->
+    <resultMap id="user_card_map" type="userCardDto">
+        <!--<association property="user" javaType="user">-->
+            <id column="id" property="id"></id>
+            <result column="user_name" property="userName"></result>
+            <result column="user_pwd" property="userPwd"></result>
+            <result column="real_name" property="realName"></result>
+            <result column="card_id" property="cardId"></result>
+            <result column="nation" property="nation"></result>
+       <!-- </association>-->
+        <!--实现一对一-->
+        <association property="card" javaType="card">
+            <id column="cid" property="id"></id>
+            <result column="card_num" property="cardNum"></result>
+        </association>
+    </resultMap>
+
+    <select id="queryUserCardByIdUse" parameterType="int" resultMap="user_card_map">
+        SELECT
+            user.id,
+            user.user_name,
+            user.user_pwd,
+            user.real_name,
+            user.nation,
+            user.card_id,
+            card.id,
+            card.card_num
+        FROM
+            user
+        INNER JOIN card ON card.id = user.id
+        where user.id = #{i}
+    </select>
+
+    <!--实现一对多-->
+    <resultMap id="user_card_account_map" extends="user_card_map" type="userCardAccountDto">
+        <collection property="accounts" ofType="account">
+            <id column="aid" property="id"></id>
+            <result column="aname" property="aname"></result>
+            <result column="type" property="type"></result>
+            <result column="money" property="money"></result>
+            <result column="user_id" property="userId"></result>
+            <result column="create_time" property="createTime"></result>
+            <result column="update_time" property="updateTime"></result>
+            <result column="remark" property="remark"></result>
+        </collection>
+    </resultMap>
+
+    <select id="queryUserCardAccountByIdUses" parameterType="int" resultMap="user_card_account_map">
+            SELECT
+            u.id,
+            u.user_name,
+            u.user_pwd,
+            u.real_name,
+            u.nation,
+            u.card_id,
+            c.id AS cid,
+            c.card_num,
+            a.id as aid,
+            a.aname,
+            a.type,
+            a.money,
+            a.user_id,
+            a.create_time,
+            a.update_time,
+            a.remark
+            FROM
+            `user` AS u
+            LEFT JOIN card AS c ON c.id = u.card_id
+            LEFT JOIN account AS a ON a.user_id = u.id
+            WHERE
+            u.id = #{id}
+
+    </select>
+
 </mapper>

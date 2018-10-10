@@ -1,12 +1,11 @@
-package com.mybatis.po;
+package com.mybatis.dto;
 
-import java.io.Serializable;
+import com.mybatis.po.Account;
+import com.mybatis.po.Card;
 
-/**
- * Created by xlf on 2018/10/9.
- */
-public class User  implements Serializable {
+import java.util.List;
 
+public class UserCardAccountDto {
     private Integer id;
     private String userName;
     private String userPwd;
@@ -14,6 +13,8 @@ public class User  implements Serializable {
     private String nation;
     private Integer cardId;
 
+    private Card card;
+    private List<Account> accounts;
 
     public Integer getId() {
         return id;
@@ -63,15 +64,33 @@ public class User  implements Serializable {
         this.cardId = cardId;
     }
 
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
     @Override
     public String toString() {
-        return "User{" +
+        return "UserCardAccountDto{" +
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", userPwd='" + userPwd + '\'' +
                 ", realName='" + realName + '\'' +
                 ", nation='" + nation + '\'' +
                 ", cardId=" + cardId +
+                ", card=" + card +
+                ", accounts=" + accounts +
                 '}';
     }
 }

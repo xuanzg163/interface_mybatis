@@ -11,6 +11,8 @@
     <!--指定包扫描的类型别名-->
     <typeAliases>
         <package name="com.mybatis.po"/><!--路径下的实体类全是小写名称-->
+        <package name="com.mybatis.dto"/><!--路径下的实体类全是小写名称-->
+
     </typeAliases>
 
     <environments default="development">

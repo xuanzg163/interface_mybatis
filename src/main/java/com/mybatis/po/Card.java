@@ -1,9 +1,11 @@
 package com.mybatis.po;
 
+import java.io.Serializable;
+
 /**
  * Created by xlf on 2018/10/10.
  */
-public class Card {
+public class Card  implements Serializable {
     private Integer id;
     private Integer cardNum;
 

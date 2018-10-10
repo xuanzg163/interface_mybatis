@@ -1,5 +1,7 @@
 package com.mybatis.mapper;
 
+import com.mybatis.dto.UserCardAccountDto;
+import com.mybatis.dto.UserCardDto;
 import com.mybatis.po.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,5 +26,8 @@ public interface UserMapper {
     public Integer updateUserBatch(Integer[] idx);
     public Integer deleteUser(Integer id);
     public Integer deleteUserBatch(List<Integer> idx);
+    public UserCardDto queryUserCardByIdUse(Integer id);
+    public UserCardAccountDto queryUserCardAccountByIdUses(Integer id);
+
 }
 
